@@ -1,0 +1,123 @@
+﻿@model Gestion_Tickets_Sp_Tec.Models.REPORTES
+
+@{
+    ViewBag.Title = "Nuevo Ticket";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-warning text-white text-center py-3">
+                    <h3 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Gestionar Ticket de Soporte</h3>
+                </div>
+                <div class="card-body p-4">
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="row">
+                                <div class="col-md-6 form-group mb-3">
+                                    @Html.LabelFor(model => model.FECHA_REPORTE, "Fecha de Apertura", new { @class = "form-label fw-bold" })
+                                    @Html.EditorFor(model => model.FECHA_REPORTE, new { htmlAttributes = new { @class = "form-control", @type = "datetime-local" } })
+                                    @Html.ValidationMessageFor(model => model.FECHA_REPORTE, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-md-6 form-group mb-3">
+                                    @Html.LabelFor(model => model.PRIORIDAD, new { @class = "form-label fw-bold" })
+                                    @Html.DropDownListFor(model => model.PRIORIDAD, new List<SelectListItem>
+                                    {
+                                        new SelectListItem{ Text="URGENTE", Value="URGENTE" },
+                                        new SelectListItem{ Text="MEDIO", Value="MEDIO" },
+                                        new SelectListItem{ Text="NO URGENTE", Value="NO URGENTE" }
+                                    }, "-- Seleccionar --", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.PRIORIDAD, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.DESCRIPCION, new { @class = "form-label fw-bold" })
+                                @Html.TextAreaFor(model => model.DESCRIPCION, new { @class = "form-control", @rows = "3", @placeholder = "¿Cuál es el problema que presenta?" })
+                                @Html.ValidationMessageFor(model => model.DESCRIPCION, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 form-group mb-3">
+                                    @Html.LabelFor(model => model.ID_USUARIO, "Usuario Solicitante", new { @class = "form-label fw-bold" })
+                                    @Html.DropDownList("ID_USUARIO", null, "-- Seleccionar Usuario --", htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ID_USUARIO, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-md-6 form-group mb-3">
+                                    @Html.LabelFor(model => model.ID_TECNICO, "Técnico Asignado", new { @class = "form-label fw-bold" })
+                                    @Html.DropDownList("ID_TECNICO", null, "-- Se le Asigna después --", htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                    @Html.ValidationMessageFor(model => model.ID_TECNICO, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 form-group mb-3">
+                                    @Html.LabelFor(model => model.ESTADO, new { @class = "form-label fw-bold" })
+                                    @Html.DropDownListFor(model => model.ESTADO, new List<SelectListItem>
+                                    {
+                                        new SelectListItem{ Text="ACTIVO", Value="ACTIVO", Selected=true },
+                                        new SelectListItem{ Text="INACTIVO", Value="INACTIVO" },
+                                        new SelectListItem{ Text="SOLUCIONADO", Value="SOLUCIONADO" }
+                                    }, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ESTADO, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-md-6 form-group mb-3">
+                                    @Html.LabelFor(model => model.FECHA_SOLUCION, "Fecha de Cierre Estimada", new { @class = "form-label fw-bold" })
+                                    @Html.EditorFor(model => model.FECHA_SOLUCION, new { htmlAttributes = new { @class = "form-control", @type = "datetime-local" } })
+                                    @Html.ValidationMessageFor(model => model.FECHA_SOLUCION, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                @Html.LabelFor(model => model.OBSERVACIONES, "Información Adicional", new { @class = "form-label fw-bold" })
+                                @Html.TextAreaFor(model => model.OBSERVACIONES, new { @class = "form-control", @rows = "2" })
+                                @Html.ValidationMessageFor(model => model.OBSERVACIONES, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-outline-danger me-md-2" })
+                                <button type="submit" class="btn btn-success px-5">
+                                    <i class="glyphicon glyphicon-floppy-disk"></i> Guardar Ticket
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 15px;
+    }
+
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+
+    .fw-bold {
+        font-weight: 600;
+        color: #495057;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,87 @@
+﻿@model Gestion_Tickets_Sp_Tec.Models.USUARIOS
+
+@{
+    ViewBag.Title = "Registro Automático de Usuario";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white py-3">
+                    <h4 class="mb-0 text-center">
+                        <i class="bi bi-person-badge me-2"></i>Nuevo Registro de Usuario
+                    </h4>
+                </div>
+                <div class="card-body p-5">
+
+                    @using (Html.BeginForm("NuevoUsuario", "REPORTES", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-primary">ID Usuario (SISTEMA)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-key-fill"></i></span>
+                                    <input type="number" name="ID_USUARIO" value="@ViewBag.SiguienteID" class="form-control bg-light" readonly />
+                                </div>
+                                <small class="text-muted italic">Este identificador ha sido asignado automáticamente.</small>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.NOMBRE, "Nombre Completo", new { @class = "form-label fw-bold" })
+                                    @Html.EditorFor(model => model.NOMBRE, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nombre" } })
+                                    @Html.ValidationMessageFor(model => model.NOMBRE, "", new { @class = "text-danger small" })
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.APELLIDOS, "Apellidos", new { @class = "form-label fw-bold" })
+                                    @Html.EditorFor(model => model.APELLIDOS, new { htmlAttributes = new { @class = "form-control", @placeholder = "Apellidos" } })
+                                    @Html.ValidationMessageFor(model => model.APELLIDOS, "", new { @class = "text-danger small" })
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                @Html.LabelFor(model => model.CORREO, "Correo Electrónico", new { @class = "form-label fw-bold" })
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
+                                    @Html.EditorFor(model => model.CORREO, new { htmlAttributes = new { @class = "form-control", @type = "email", @placeholder = "usuario@empresa.com" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.CORREO, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.ID_DEPARTAMENTO, "Departamento", new { @class = "form-label fw-bold" })
+                                    @Html.DropDownList("ID_DEPARTAMENTO", null, "-- Seleccione --", htmlAttributes: new { @class = "form-select" })
+                                    @Html.ValidationMessageFor(model => model.ID_DEPARTAMENTO, "", new { @class = "text-danger small" })
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    @Html.LabelFor(model => model.ID_ROL, "Rol", new { @class = "form-label fw-bold" })
+                                    @Html.DropDownList("ID_ROL", null, "-- Seleccione --", htmlAttributes: new { @class = "form-select" })
+                                    @Html.ValidationMessageFor(model => model.ID_ROL, "", new { @class = "text-danger small" })
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mt-4 border-top pt-4">
+                                <a href="@Url.Action("Create", "REPORTES")" class="btn btn-outline-danger px-4">
+                                    <i class="bi bi-x-circle"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-success px-5 shadow">
+                                    <i class="bi bi-check-circle-fill"></i> Guardar Usuario
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,132 @@
+﻿@model Gestion_Tickets_Sp_Tec.Models.REPORTES
+
+@{
+    ViewBag.Title = "Detalles del Ticket #" + Model.ID_REPORTE;
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="mb-3">
+                <a href="@Url.Action("Index")" class="btn btn-link text-decoration-none p-0 text-muted">
+                    <i class="bi bi-arrow-left"></i> Volver al listado
+                </a>
+            </div>
+
+            <div class="card shadow border-0">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="text-uppercase text-muted mb-0 small fw-bold">Número de Ticket</h5>
+                        <h3 class="mb-0 text-primary">#@Model.ID_REPORTE</h3>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge rounded-pill @(Model.ESTADO == "SOLUCIONADO" ? "bg-success" : "bg-primary") px-4 py-2" style="font-size: 0.9rem;">
+                            <i class="bi bi-info-circle me-1"></i> @(Model.ESTADO ?? "PENDIENTE")
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-6 border-end">
+                            <h6 class="text-muted fw-bold mb-3"><i class="bi bi-person-circle"></i> Información del Solicitante</h6>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span class="text-secondary small">Nombre Completo:</span>
+                                    <span class="fw-bold">@Html.DisplayFor(model => model.USUARIOS.NOMBRE) @Html.DisplayFor(model => model.USUARIOS.APELLIDOS)</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span class="text-secondary small">Departamento:</span>
+                                    <span>@(Model.USUARIOS?.DEPARTAMENTOS?.DEPARTAMENTO ?? "No especificado")</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span class="text-secondary small">Fecha de Reporte:</span>
+                                    <span class="text-dark">@(Model.FECHA_REPORTE.HasValue ? Model.FECHA_REPORTE.Value.ToString("dd/MM/yyyy HH:mm") : "N/A")</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="text-muted fw-bold mb-3"><i class="bi bi-tools"></i> Asignación Técnica</h6>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span class="text-secondary small">Técnico Responsable:</span>
+                                    <span class="badge bg-light text-dark border fw-bold">
+                                        @(Model.USUARIOS1 != null ? Model.USUARIOS1.NOMBRE : "Sin asignar")
+                                    </span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span class="text-secondary small">Prioridad:</span>
+                                    @{
+                                        var pColor = Model.PRIORIDAD == "URGENTE" ? "text-danger" : (Model.PRIORIDAD == "MEDIO" ? "text-warning" : "text-info");
+                                    }
+                                    <span class="fw-bold @pColor">@Model.PRIORIDAD</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                    <span class="text-secondary small">Fecha de Solución:</span>
+                                    <span class="fw-bold">@(Model.FECHA_SOLUCION.HasValue ? Model.FECHA_SOLUCION.Value.ToString("dd/MM/yyyy HH:mm") : "En proceso...")</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row mt-4">
+                        <div class="col-12 mb-4">
+                            <div class="p-3 rounded bg-light border-start border-4 border-primary">
+                                <label class="fw-bold text-primary small text-uppercase">Descripción del Problema</label>
+                                <p class="mb-0 mt-2 text-dark" style="white-space: pre-line;">@Model.DESCRIPCION</p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="p-3 rounded bg-light border-start border-4 border-success">
+                                <label class="fw-bold text-success small text-uppercase">Observaciones de Resolución</label>
+                                <p class="mb-0 mt-2 text-dark italic">@(string.IsNullOrEmpty(Model.OBSERVACIONES) ? "No hay observaciones registradas aún." : Model.OBSERVACIONES)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light py-3 d-flex justify-content-end gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+                        <i class="bi bi-printer"></i> Imprimir Reporte
+                    </button>
+                    <a href="@Url.Action("Edit", new { id = Model.ID_REPORTE })" class="btn btn-warning px-4">
+                        <i class="bi bi-pencil"></i> Editar Información
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 12px;
+    }
+
+    .card-header {
+        border-radius: 12px 12px 0 0 !important;
+    }
+
+    .list-group-item {
+        background-color: transparent;
+    }
+
+    @@media print {
+        .navbar, .btn, .card-footer, .mb-3 {
+            display: none !important;
+        }
+
+        .card {
+            box-shadow: none !important;
+            border: 1px solid #ddd !important;
+        }
+
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+    }
+</style>

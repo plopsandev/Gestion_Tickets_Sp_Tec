@@ -1,0 +1,104 @@
+﻿@model IEnumerable<Gestion_Tickets_Sp_Tec.Models.REPORTES>
+
+@{
+    ViewBag.Title = "Gestión de Tickets";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-info"><i class="glyphicon glyphicon-list-alt"></i> Listado de Reportes</h2>
+        @Html.ActionLink("Crear Nuevo Ticket", "Create", null, new { @class = "btn btn-success shadow-sm" })
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.FECHA_REPORTE)</th>
+                            <th>@Html.DisplayNameFor(model => model.USUARIOS.NOMBRE)</th>
+                            <th>@Html.DisplayNameFor(model => model.DESCRIPCION)</th>
+                            <th>@Html.DisplayNameFor(model => model.PRIORIDAD)</th>
+                            <th>@Html.DisplayNameFor(model => model.ESTADO)</th>
+                            <th>Técnico Asignado</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="small">
+                                    @(item.FECHA_REPORTE.HasValue ? item.FECHA_REPORTE.Value.ToString("dd/MM/yyyy HH:mm") : "N/A")
+                                </td>
+                                <td>
+                                    <strong>@Html.DisplayFor(modelItem => item.USUARIOS.NOMBRE)</strong>
+                                </td>
+                                <td class="text-truncate" style="max-width: 200px;">
+                                    @Html.DisplayFor(modelItem => item.DESCRIPCION)
+                                </td>
+                                <td>
+                                    @{
+                                        var pClass = item.PRIORIDAD == "URGENTE" ? "danger" : (item.PRIORIDAD == "MEDIO" ? "warning" : "info");
+                                    }
+                                    <span class="label label-@pClass">@item.PRIORIDAD</span>
+                                </td>
+                                <td>
+                                    @{
+                                        var eClass = item.ESTADO == "SOLUCIONADO" ? "success" : "primary";
+                                    }
+                                    <span class="badge badge-@eClass" style="background-color: @(item.ESTADO == "SOLUCIONADO" ? "#28a745" : "#007bff"); color: white; padding: 5px 10px; border-radius: 4px;">
+                                        @item.ESTADO
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-muted small">
+                                        @(item.USUARIOS1 != null ? item.USUARIOS1.NOMBRE : "Sin asignar")
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="@Url.Action("Edit", new { id = item.ID_REPORTE })" class="btn btn-default" title="Editar">
+                                            <i class="glyphicon glyphicon-pencil text-primary"></i>
+                                        </a>
+                                        <a href="@Url.Action("Details", new { id = item.ID_REPORTE })" class="btn btn-default" title="Detalles">
+                                            <i class="glyphicon glyphicon-eye-open"></i>
+                                        </a>
+                                        <a href="@Url.Action("Delete", new { id = item.ID_REPORTE })" class="btn btn-default" title="Eliminar">
+                                            <i class="glyphicon glyphicon-trash text-danger"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Ajustes para modernizar la tabla en versiones antiguas de Bootstrap */
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+</style>
